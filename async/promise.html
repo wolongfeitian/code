@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+    <script>
+        function loadImg(src){
+            var promise = new Promise(function(resolve,reject){
+                var img = document.createElement('img')
+                img.onload = function(){
+                    resolve(img)
+                }
+                img.onerror = function(){
+                    reject(0)
+                }
+                img.src = src
+            })
+            return promise
+        }
+
+        var src = 'https://m.360buyimg.com/babel/jfs/t23356/309/2325801494/100501/e8e56518/5b7aeb42N287ca2e5.jpg'
+        var result = loadImg(src)
+        result.then(function (img) {
+            console.log(1,img.width)
+            return img
+        },function(){
+            console.log('error 1')
+            return img
+        }).then(function (img) {
+            console.log(2,img.height)
+        },function () {
+            console.log('error 2')
+        })
+    </script>
+</body>
+</html>

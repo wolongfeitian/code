@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+    <p>deferred</p>
+    <script src="https://cdn.bootcss.com/jquery/3.2.0/jquery.min.js"></script>
+    <script>
+        var ajax = $.ajax({
+            utl:'data.json',
+            success:function(){
+                console.log('success1')
+                console.log('success2')
+                console.log('success3')
+            },
+            error:function(){
+                console.log('error')
+            }
+        })
+        console.log(ajax) //返回一个XHR对象
+
+        var ajax = $.ajax('data.json')
+        ajax.done(function(){
+            console.log('success1')
+        })
+            .fail(function(){
+                console.log('error')
+            })
+            .done(function(){
+                console.log('success2')
+            })
+        console.log(ajax) //返回一个deferred对象
+
+        var ajax = $.ajax('data.json')
+        ajax.then(function(){
+            console.log('success1')
+        },function(){
+            console.log('error1')
+        }).then(function(){
+            console.log('success2')
+        },function(){
+            console.log('success2')
+        })
+        /*var wait = function(){
+            var task = function (){
+                console.log('执行完成')
+            }
+            setTimeout(task,2000)
+        }
+        wait()*/
+
+        function waitHandle(){
+           var dtd = $.Deferred()
+
+           var wait = function(dtd){
+               var task = function (){
+                   console.log('执行完成')
+                   //执行成功
+                   dtd.resolve()
+
+                   //执行失败
+                  // dtd.reject()
+               }
+               setTimeout(task,2000)
+
+               return dtd.promise
+           }
+
+           return wait(dtd)
+        }
+
+        var w = waitHandle()
+        $.when(w).then(function (){
+            console.log('OK 1')
+        },function (){
+            console.log('err 1')
+        })
+        $.when(w).then(function (){
+            console.log('OK 2')
+        },function (){
+            console.log('err 2')
+        })
+        $.when(w).then(function (){
+            console.log('OK 3')
+        },function (){
+            console.log('err 3')
+        })
+
+        //开放封闭原则：对扩展开放，对修改封闭
+    </script>
+</body>
+</html>
